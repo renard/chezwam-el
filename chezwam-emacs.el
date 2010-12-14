@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: emacs, configuration
 ;; Created: 2010-12-09
-;; Last changed: 2010-12-09 17:09:20
+;; Last changed: 2010-12-10 00:10:15
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -43,5 +43,12 @@
 (line-number-mode 1)
 (column-number-mode 1)
 (setq-default fill-column 76)
+
+;; browser
+(setq
+ browse-url-generic-program "conkeror"
+ browse-url-browser-function 'browse-url-generic)
+
+
 
 (provide 'chezwam-emacs)
