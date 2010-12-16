@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: 
 ;; Created: 2010-10-12
-;; Last changed: 2010-12-16 00:22:56
+;; Last changed: 2010-12-16 10:56:13
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -49,12 +49,11 @@ Based on TWB hack (http://paste.lisp.org/display/90780)."
 	      (cons (vector "sshx" ""
 			    (tramp-file-name-host vec-or-proc)
 			    "")
-		    (cons (vector (tramp-file-name-method vec-or-proc)
+		    (list (vector (tramp-file-name-method vec-or-proc)
 				  (unless (string= "root" (tramp-file-name-user vec-or-proc))
 				    (tramp-file-name-user vec-or-proc))
 				  (tramp-file-name-host vec-or-proc)
-				  (tramp-file-name-localname vec-or-proc))
-			  nil))))
+				  (tramp-file-name-localname vec-or-proc))))))
     ad-do-it))
 
 (setq
