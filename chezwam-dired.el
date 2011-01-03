@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: emacs, dired
 ;; Created: 2010-11-19
-;; Last changed: 2010-12-10 00:16:01
+;; Last changed: 2011-01-03 12:36:46
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -36,5 +36,25 @@
 (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
 (define-key dired-mode-map (kbd "<C-return>")
   'gnus-dired-find-file-mailcap)
+
+
+(defun dired-mplayer (&optional file)
+  ""
+  (interactive)
+  (let* ((file (or file (dired-file-name-at-point)))
+	 (file-vec (or (ignore-errors (tramp-dissect-file-name file))
+		       (tramp-dissect-file-name (concat "/:" file) 1)))
+	 (host (tramp-file-name-real-host file-vec))
+	 (user (tramp-file-name-user file-vec))
+	 (path (tramp-file-name-localname file-vec))
+	 (method (tramp-file-name-method file-vec))
+	 (default-directory "~"))
+    (if (not host)
+	(shell-command (format "mplayer %s" path))
+      (shell-command
+       (concat "ssh -o StrictHostKeyChecking=no "
+	       "-o UserKnownHostsFile=/dev/null "
+	       host " cat " path 
+	       " | mplayer -quiet - &")))))
 
 (provide 'chezwam-dired)
