@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: emacs, dired
 ;; Created: 2010-11-19
-;; Last changed: 2011-01-03 12:36:46
+;; Last changed: 2011-01-13 16:43:05
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -54,7 +54,7 @@
       (shell-command
        (concat "ssh -o StrictHostKeyChecking=no "
 	       "-o UserKnownHostsFile=/dev/null "
-	       host " cat " path 
-	       " | mplayer -quiet - &")))))
+	       host " cat '" (shell-quote-argument path)
+	       "' | mplayer -quiet - &")))))
 
 (provide 'chezwam-dired)
