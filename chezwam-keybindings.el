@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: 
 ;; Created: 2010-10-13
-;; Last changed: 2011-03-30 15:22:00
+;; Last changed: 2011-03-30 15:39:19
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -26,10 +26,10 @@
 (setq ido-use-url-at-point t)
 
 (define-key global-map (kbd "C-x C-b") 'ido-switch-buffer)
-(define-key global-map (kbd "C-x b") 'ibuffer)
+(define-key global-map (kbd "C-x B") 'ibuffer)
 
 ;; Do not quit Emacs. Use M-x kill-emacs instead
-(global-unset-key (kbd "C-x C-c"))
+(define-key global-map (kbd "C-x C-c") 'ido-switch-buffer)
 
 (define-key global-map (kbd "C-z") 'undo)
 (define-key global-map (kbd "M-/") 'hippie-expand)
