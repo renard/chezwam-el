@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: 
 ;; Created: 2010-11-26
-;; Last changed: 2010-12-21 16:06:38
+;; Last changed: 2011-03-21 10:17:04
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -143,7 +143,8 @@ given by `cw:gnus:host-configuration'."
  gnus-gcc-mark-as-read t
  mail-specify-envelope-from t
  message-send-mail-function 'smtpmail-send-it
- smtpmail-default-smtp-server "127.0.0.1")
+ smtpmail-default-smtp-server "127.0.0.1"
+ gnus-article-update-date-headers nil)
 
 
 
