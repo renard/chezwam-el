@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: 
 ;; Created: 2010-10-13
-;; Last changed: 2011-03-30 15:39:19
+;; Last changed: 2011-03-30 16:52:57
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -28,8 +28,26 @@
 (define-key global-map (kbd "C-x C-b") 'ido-switch-buffer)
 (define-key global-map (kbd "C-x B") 'ibuffer)
 
+(setq cw:switch-to-buffer-visiting-file-list nil)
+(defun cw:switch-to-buffer-visiting-file (&optional filename)
+  "Switch to buffer visiting FILENAME."
+  (interactive)
+  (save-current-buffer
+    (let ((filename (or filename 
+			(completing-read
+			 "Switch to buffer visiting: " 
+			 (remove 'nil (mapcar
+				       (lambda(x)
+					 (set-buffer x)
+					 (if (eq major-mode 'dired-mode)
+					     (file-name-directory (dired-get-filename nil t ))
+					   (buffer-file-name)))
+				       (buffer-list)))
+			 t t nil 'cw:switch-to-buffer-visiting-file-list nil t))))
+      (find-file filename))))
+
 ;; Do not quit Emacs. Use M-x kill-emacs instead
-(define-key global-map (kbd "C-x C-c") 'ido-switch-buffer)
+(define-key global-map (kbd "C-x C-c") 'cw:switch-to-buffer-visiting-file)
 
 (define-key global-map (kbd "C-z") 'undo)
 (define-key global-map (kbd "M-/") 'hippie-expand)
