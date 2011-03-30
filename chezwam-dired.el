@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: emacs, dired
 ;; Created: 2010-11-19
-;; Last changed: 2011-01-13 16:43:05
+;; Last changed: 2011-03-16 22:57:14
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -33,10 +33,12 @@
     (kill-buffer orig)))
 
 (require 'gnus-dired)
+(require 'mailcap)
 (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
 (define-key dired-mode-map (kbd "<C-return>")
   'gnus-dired-find-file-mailcap)
-
+(add-to-list 'mailcap-mime-extensions '(".mkv" . "video/x-matroska"))
+(mailcap-parse-mailcaps nil t)
 
 (defun dired-mplayer (&optional file)
   ""
@@ -55,6 +57,6 @@
        (concat "ssh -o StrictHostKeyChecking=no "
 	       "-o UserKnownHostsFile=/dev/null "
 	       host " cat '" (shell-quote-argument path)
-	       "' | mplayer -quiet - &")))))
+	       "' | mplayer -idx -quiet - &")))))
 
 (provide 'chezwam-dired)
