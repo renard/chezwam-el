@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: 
 ;; Created: 2010-10-13
-;; Last changed: 2011-03-30 16:52:57
+;; Last changed: 2011-03-31 16:06:03
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -26,6 +26,7 @@
 (setq ido-use-url-at-point t)
 
 (define-key global-map (kbd "C-x C-b") 'ido-switch-buffer)
+(define-key global-map (kbd "C-x b") 'ido-switch-buffer)
 (define-key global-map (kbd "C-x B") 'ibuffer)
 
 (setq cw:switch-to-buffer-visiting-file-list nil)
@@ -40,11 +41,12 @@
 				       (lambda(x)
 					 (set-buffer x)
 					 (if (eq major-mode 'dired-mode)
-					     (file-name-directory (dired-get-filename nil t ))
+					     default-directory
 					   (buffer-file-name)))
 				       (buffer-list)))
 			 t t nil 'cw:switch-to-buffer-visiting-file-list nil t))))
-      (find-file filename))))
+      (when filename
+	(find-file filename)))))
 
 ;; Do not quit Emacs. Use M-x kill-emacs instead
 (define-key global-map (kbd "C-x C-c") 'cw:switch-to-buffer-visiting-file)
