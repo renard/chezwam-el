@@ -5,21 +5,23 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: emacs, configuration
 ;; Created: 2010-12-09
-;; Last changed: 2010-12-09 11:08:33
+;; Last changed: 2011-04-06 01:01:57
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
 
 ;;; Commentary:
-;; 
+;;
 
 
 ;;; Code:
 
 (defun lsb-release (&optional property)
-  "Parse lsb-release output and return an alist, or the value for the given property"
+  "Parse lsb-release output and return an alist, or the value for
+the given property"
   (when (file-executable-p "/usr/bin/lsb_release")
-    (let* ((lsbr (shell-command-to-string "/usr/bin/lsb_release -a 2>/dev/null"))
+    (let* ((lsbr (shell-command-to-string
+		  "/usr/bin/lsb_release -a 2>/dev/null"))
            (props (split-string lsbr "[:\n]" t))
            (kv))
       (while (>= (length props) 2)
