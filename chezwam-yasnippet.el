@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: emacs, yasnippet, configuration
 ;; Created: 2010-12-09
-;; Last changed: 2010-12-10 12:18:17
+;; Last changed: 2011-04-20 12:30:55
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -42,7 +42,7 @@ should contain the default file skeleton."
 	      #'(lambda ()
 		  (and yas/snippet-dirs
 		       (null (yas/get-snippet-tables)))))
-
+(setq yas/trigger-key "M-TAB")
 (setq yas/snippet-dirs "~/.emacs.d/templates")
 (setq yas/prompt-functions '(yas/completing-prompt))
 (yas/initialize)
