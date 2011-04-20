@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: 
 ;; Created: 2010-11-26
-;; Last changed: 2011-03-21 10:17:04
+;; Last changed: 2011-04-20 20:08:52
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -76,6 +76,7 @@ or `mail-envelope-from'."
 (defun cw:gnus:archive-message (current-folder)
   "Post a copy of sent message in current or default folder as
 given by `cw:gnus:host-configuration'."
+  (message (format "Archiving mail to %s" current-folder))
   (cond
    ((string-equal "" current-folder)
     (plist-get
@@ -146,11 +147,30 @@ given by `cw:gnus:host-configuration'."
  smtpmail-default-smtp-server "127.0.0.1"
  gnus-article-update-date-headers nil)
 
-
+(require 'offlineimap)
+(defun cw:gnus:fetchmail()
+  "Update mails using both `offlineimap' and
+`gnus-group-get-new-news'."
+  (interactive)
+  (offlineimap))
 
 (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 (add-hook 'message-mode-hook 'cw:gnus:configure-group)
 (add-hook 'message-mode-hook 'flyspell-mode)
 (add-hook 'message-mode-hook 'flyspell-buffer)
+(define-key gnus-group-mode-map (kbd "f") 'cw:gnus:fetchmail)
+
+
+(defun cw:gnus:kill-imap-processes ()
+  "Kill all imap processes to prevent gnus from hanging after network outage."
+  (interactive)
+  (mapcar
+   (lambda (x) (let ((pn (process-name x)))
+                 (when (string-match "imap" pn)
+                   (delete-process pn))))
+     (process-list)))
+
+;; Make sure we do have enougth contrast between colors
+(setq shr-color-visible-luminance-min 75)
 
 (provide 'gnus-init)
