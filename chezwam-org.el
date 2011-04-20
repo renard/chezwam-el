@@ -5,18 +5,16 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: emacs, org, configuration
 ;; Created: 2010-12-21
-;; Last changed: 2011-01-03 10:02:13
+;; Last changed: 2011-04-20 20:01:59
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
 
 ;;; Commentary:
-;; 
+;;
 
 
 ;;; Code:
-
-(require 'org-install)
 
 (defun cw:org:org-mode-setup ()
   "Setup buffer for `org-mode' files."
@@ -31,6 +29,27 @@
     ;; flyspell mode to spell check everywhere
     (flyspell-mode 1)
     ;;(ispell-change-dictionary "francais")
+
+    ;; redefine some key mappings in order to use windmove with Org.
+    (org-defkey org-mode-map [(shift up)]          'windmove-up)
+    (org-defkey org-mode-map [(shift down)]        'windmove-down)
+    (org-defkey org-mode-map [(shift left)]        'windmove-left)
+    (org-defkey org-mode-map [(shift right)]       'windmove-right)
+    (define-key org-mode-map (kbd "C-x <up>")    'org-shiftup)
+    (define-key org-mode-map (kbd "C-x <down>")  'org-shiftdown)
+    (define-key org-mode-map (kbd "C-x <left>")  'org-shiftleft)
+    (define-key org-mode-map (kbd "C-x <right>") 'org-shiftright)
+
+    ;; redefine some key mappings in order to use windmove with Org-calendar.
+    (org-defkey org-agenda-mode-map [(shift up)]          'windmove-up)
+    (org-defkey org-agenda-mode-map [(shift down)]        'windmove-down)
+    (org-defkey org-agenda-mode-map [(shift left)]        'windmove-left)
+    (org-defkey org-agenda-mode-map [(shift right)]       'windmove-right)
+    (define-key org-agenda-mode-map (kbd "C-x <up>")    'org-agenda-priority-up)
+    (define-key org-agenda-mode-map (kbd "C-x <down>")  'org-agenda-priority-down)
+    (define-key org-agenda-mode-map (kbd "C-x <left>")  'org-agenda-do-date-earlier)
+    (define-key org-agenda-mode-map (kbd "C-x <right>") 'org-agenda-do-date-later)
+
     ))
 
 (defadvice org-publish-projects
@@ -39,20 +58,28 @@
   (let ((cw:org:publishing-project t))
     ad-do-it))
 
-(when (require 'org nil t)
-  (require 'cw-org-publish nil t)
-  (add-hook 'org-mode-hook 'cw:org:org-mode-setup))
+(require 'cw-org-publish nil t)
+(add-hook 'org-mode-hook 'cw:org:org-mode-setup)
 
 
-;; redefine some key mappings in order to use windmove with Org.
-(org-defkey org-mode-map [(shift up)]          'windmove-up)
-(org-defkey org-mode-map [(shift down)]        'windmove-down)
-(org-defkey org-mode-map [(shift left)]        'windmove-left)
-(org-defkey org-mode-map [(shift right)]       'windmove-right)
-(define-key org-mode-map (kbd "C-x <up>")    'org-shiftup)
-(define-key org-mode-map (kbd "C-x <down>")  'org-shiftdown)
-(define-key org-mode-map (kbd "C-x <left>")  'org-shiftleft)
-(define-key org-mode-map (kbd "C-x <right>") 'org-shiftright)
+(defun cw:org:toggle-encryption()
+  "Toggle encryption in for current entry."
+  (interactive)
+  (save-excursion
+    (org-back-to-heading t)
+    (next-line)
+    (if (looking-at "-----BEGIN PGP MESSAGE-----")
+	(org-decrypt-entry)
+      (org-encrypt-entry))))
 
+(setq org-agenda-files '("~/.emacs.d/org/agenda.org"
+			 "~/.emacs.d/org/todo.org"
+			 "~/.emacs.d/org/diary.org"
+			 "~/.emacs.d/org/rentabiliweb.org"
+			 "~/.emacs.d/org/refile.org"))
+
+
+(add-to-list 'org-link-escape-chars '(?\311 . "%C9")) ; É
 
 (provide 'chezwam-org)
+
