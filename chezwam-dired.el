@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: emacs, dired
 ;; Created: 2010-11-19
-;; Last changed: 2011-03-16 22:57:14
+;; Last changed: 2011-05-11 18:12:03
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -58,5 +58,48 @@
 	       "-o UserKnownHostsFile=/dev/null "
 	       host " cat '" (shell-quote-argument path)
 	       "' | mplayer -idx -quiet - &")))))
+
+
+
+(defun dired-toogle-sudo ()
+  "Open current dired buffer with sudo"
+  (interactive)
+  (let* ((orig (current-buffer))
+	 (file-vec (or (ignore-errors (tramp-dissect-file-name
+				       default-directory))
+		       (tramp-dissect-file-name
+			(concat "/:" default-directory) 1)))
+	 (method  (tramp-file-name-method file-vec))
+	 (user (tramp-file-name-user file-vec)) 
+	 (host  (tramp-file-name-host file-vec))
+	 (localname (expand-file-name (tramp-file-name-localname file-vec)))
+	 uri)
+    (when (string= system-name host)
+      (setq host nil))
+    (cond
+     ;; remote directory -> sudo
+     ((and host (string= method "scp"))
+      (setq method "sudo" user nil))
+     ;; remote directory -> normal
+     ((and host (string= method "sudo"))
+      (setq method "scp" user nil))
+     ;; Local directory -> normal
+     ((and (not host) (string= method "scp"))
+      (setq method "sudo"))
+     ;; Local directory -> sudo
+     ((and (not host) (string= method "sudo"))
+      (setq method nil user nil))
+     ;; Local directory -> normal
+     (t
+      (setq method "sudo")))
+    (setq uri
+	  (replace-regexp-in-string  
+	   "^/:/" "/"
+	   (tramp-make-tramp-file-name method user host localname)))
+    (when (eq major-mode 'dired-mode)
+      (kill-buffer orig))
+    (dired uri)))
+(define-key dired-mode-map (kbd "C-c C-s") 'dired-toogle-sudo)
+
 
 (provide 'chezwam-dired)
