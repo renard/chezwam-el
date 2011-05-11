@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: 
 ;; Created: 2010-10-13
-;; Last changed: 2011-03-31 16:06:03
+;; Last changed: 2011-05-11 18:44:30
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -29,6 +29,72 @@
 (define-key global-map (kbd "C-x b") 'ido-switch-buffer)
 (define-key global-map (kbd "C-x B") 'ibuffer)
 
+
+(defun cw:get-buffer-visiting-file-or-directory-list()
+  ""
+  (mapcar 'abbreviate-file-name
+	  (remove 'nil (mapcar
+			(lambda(x)
+			  (set-buffer x)
+			  (if (eq major-mode 'dired-mode)
+			      default-directory
+			    (buffer-file-name)))
+			(buffer-list)))))
+
+
+(defun cw:get-buffer-visiting-directory-list()
+  ""
+  (mapcar 'abbreviate-file-name
+	  (remove 'nil (mapcar
+			(lambda(x)
+			  (set-buffer x)
+			  (when (eq major-mode 'dired-mode)
+			      default-directory))
+			(buffer-list)))))
+
+(defun cw:get-buffer-visiting-file-list()
+  ""
+  (mapcar 'abbreviate-file-name
+	  (delete-duplicates
+	   (remove 'nil (mapcar
+			 (lambda(x)
+			   (set-buffer x)
+			   (unless (eq major-mode 'dired-mode)
+			     (buffer-file-name)))
+			 (buffer-list))))))
+
+
+
+(setq cw:switch-to-buffer-visiting-file-or-directory-list nil)
+(defun cw:switch-to-buffer-visiting-file-or-directory (&optional filename)
+  "Switch to buffer visiting FILENAME."
+  (interactive)
+  (save-current-buffer
+    (let ((filename (or filename 
+			(completing-read
+			 "Switch to buffer visiting: "
+			 (cw:get-buffer-visiting-file-or-directory-list)
+			 t t nil 'cw:switch-to-buffer-visiting-file-or-directorylist nil t))))
+      (when filename
+	(find-file filename)))))
+
+
+
+(setq cw:switch-to-buffer-visiting-directory-list nil)
+(defun cw:switch-to-buffer-visiting-directory (&optional filename)
+  "Switch to buffer visiting FILENAME."
+  (interactive)
+  (save-current-buffer
+    (let ((filename (or filename 
+			(completing-read
+			 "Switch to buffer visiting: "
+			 (cw:get-buffer-visiting-directory-list)
+			 t t nil 'cw:switch-to-buffer-visiting-directory-list nil t))))
+      (when filename
+	(find-file filename)))))
+
+
+
 (setq cw:switch-to-buffer-visiting-file-list nil)
 (defun cw:switch-to-buffer-visiting-file (&optional filename)
   "Switch to buffer visiting FILENAME."
@@ -36,20 +102,25 @@
   (save-current-buffer
     (let ((filename (or filename 
 			(completing-read
-			 "Switch to buffer visiting: " 
-			 (remove 'nil (mapcar
-				       (lambda(x)
-					 (set-buffer x)
-					 (if (eq major-mode 'dired-mode)
-					     default-directory
-					   (buffer-file-name)))
-				       (buffer-list)))
+			 "Switch to buffer visiting: "
+			 (cw:get-buffer-visiting-file-list)
 			 t t nil 'cw:switch-to-buffer-visiting-file-list nil t))))
       (when filename
 	(find-file filename)))))
 
-;; Do not quit Emacs. Use M-x kill-emacs instead
-(define-key global-map (kbd "C-x C-c") 'cw:switch-to-buffer-visiting-file)
+
+(define-prefix-command 'cw:switch-to-buffer-map)
+(global-set-key (kbd "C-x C-c") 'cw:switch-to-buffer-map)
+(define-key cw:switch-to-buffer-map (kbd "C-c") 'cw:switch-to-buffer-visiting-file-or-directory)
+(define-key cw:switch-to-buffer-map (kbd "C-d") 'cw:switch-to-buffer-visiting-directory)
+(define-key cw:switch-to-buffer-map (kbd "C-f") 'cw:switch-to-buffer-visiting-file)
+
+
+
+;;; ; Do not quit Emacs. Use M-x kill-emacs instead
+;; (define-key global-map (kbd "C-x C-c C-c") 'cw:switch-to-buffer-visiting-file-or-directory)
+;; (define-key global-map (kbd "C-x C-c C-d") 'cw:switch-to-buffer-visiting-directory)
+;; (define-key global-map (kbd "C-x C-c C-f") 'cw:switch-to-buffer-visiting-file)
 
 (define-key global-map (kbd "C-z") 'undo)
 (define-key global-map (kbd "M-/") 'hippie-expand)
@@ -75,6 +146,22 @@ vi style of % jumping to matching brace."
         (t (self-insert-command (or arg 1)))))
 (global-set-key (kbd "C-%") 'goto-match-paren)
 
+
+
+
+;; user defined completing-read-function entered in emacs24
+(when (boundp 'completing-read-function)
+   (defun ido-completing-read* (prompt choices &optional predicate require-match
+                                       initial-input hist def inherit-input-method)
+     "Adjust arguments when it's necessary"
+     (if (and (listp choices) (not (functionp choices)))
+         (ido-completing-read
+          prompt
+          (mapcar (lambda (c) (if (listp c) (car c) c)) choices)
+          predicate require-match initial-input hist def inherit-input-method)
+       (completing-read-default prompt choices predicate require-match
+                                initial-input hist def inherit-input-method)))
+   (setq completing-read-function 'ido-completing-read*))
 
 
 (provide 'chezwam-keybindings)
