@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: emacs, configuration
 ;; Created: 2010-12-09
-;; Last changed: 2010-12-14 15:53:36
+;; Last changed: 2011-05-19 00:42:45
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -52,6 +52,5 @@
 ;; Desktop
 (setq desktop-restore-eager 20)
 (desktop-save-mode 1)
-(setq desktop-path '("~/.emacs.d/.tmp/.desktop"))
 
 (provide 'chezwam-emacs)
