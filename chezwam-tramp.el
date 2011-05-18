@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: 
 ;; Created: 2010-10-12
-;; Last changed: 2010-12-16 10:56:13
+;; Last changed: 2011-05-19 01:15:25
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -28,6 +28,7 @@ advice work. WHY ????"
   (eval-last-sexp nil)
   (kill-buffer "tramp-sh.el.gz")) 
 
+;; Need to install emacs-snapshot-el
 (eval-after-load "tramp"
   (progn
     (cw:tramp:reload-tramp-compute-multi-hops)
