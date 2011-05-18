@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: 
 ;; Created: 2010-10-13
-;; Last changed: 2011-05-19 00:50:02
+;; Last changed: 2011-05-19 00:51:02
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -88,7 +88,7 @@
   (save-current-buffer
     (let ((filename (or filename 
 			(completing-read
-			 "Switch to buffer visiting: "
+			 "Switch to buffer visiting (dir): "
 			 (cw:get-buffer-visiting-directory-list)
 			 t t nil 'cw:switch-to-buffer-visiting-directory-list nil t))))
       (when filename
@@ -103,7 +103,7 @@
   (save-current-buffer
     (let ((filename (or filename 
 			(completing-read
-			 "Switch to buffer visiting: "
+			 "Switch to buffer visiting (file): "
 			 (cw:get-buffer-visiting-file-list)
 			 t t nil 'cw:switch-to-buffer-visiting-file-list nil t))))
       (when filename
