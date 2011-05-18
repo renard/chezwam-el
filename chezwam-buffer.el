@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: emacs, configuration, buffer
 ;; Created: 2010-10-13
-;; Last changed: 2011-05-19 00:41:37
+;; Last changed: 2011-05-19 00:44:29
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -31,7 +31,7 @@
  x-select-enable-clipboard t
  x-select-enable-primary t)
 
-(defun chezwam:buffer:diff-with-file()
+(defun cw:buffer:diff-with-file()
   "Allway call `diff-buffer-with-file' in non interactive mode."
   (interactive)
   (with-current-buffer (get-buffer (current-buffer))
@@ -53,7 +53,7 @@
   ;; over to the next unsaved buffer when calling `d'.
   nil)
 
-(global-set-key (kbd "C-c C-d") 'chezwam:buffer:diff-with-file)
+(global-set-key (kbd "C-c C-d") 'cw:buffer:diff-with-file)
 
 (when (require 'uniquify nil t)
   (setq uniquify-buffer-name-style 'post-forward))
