@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: 
 ;; Created: 2010-10-13
-;; Last changed: 2011-05-11 18:44:30
+;; Last changed: 2011-05-19 00:50:02
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -24,6 +24,7 @@
 (setq ido-use-filename-at-point 'guess)
 (setq ido-show-dot-for-dired t)
 (setq ido-use-url-at-point t)
+(setq ido-auto-merge-delay-time 2.00)
 
 (define-key global-map (kbd "C-x C-b") 'ido-switch-buffer)
 (define-key global-map (kbd "C-x b") 'ido-switch-buffer)
