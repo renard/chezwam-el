@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: 
 ;; Created: 2010-10-12
-;; Last changed: 2011-05-19 01:15:25
+;; Last changed: 2011-06-24 14:24:18
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -63,5 +63,15 @@ Based on TWB hack (http://paste.lisp.org/display/90780)."
  tramp-backup-directory-alist backup-directory-alist)
 
 
+(defadvice tramp-open-connection-setup-interactive-shell 
+  (before cw:tramp-open-connection-setup-interactive-shell activate)
+  "Add process-sentinel to tramp-shells. Kill buffer when process died."
+  (set-process-sentinel
+   ;; Arg 0 is proc
+   (ad-get-arg 0)
+   (lambda (proc change)
+     (when (eq (process-status proc) 'exit)
+       (kill-buffer (process-buffer proc))))))
+    
 
 (provide 'chezwam-tramp)
