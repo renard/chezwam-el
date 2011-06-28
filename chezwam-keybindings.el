@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: 
 ;; Created: 2010-10-13
-;; Last changed: 2011-05-19 00:57:27
+;; Last changed: 2011-06-28 18:25:52
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -160,6 +160,13 @@ vi style of % jumping to matching brace."
 (global-set-key (kbd "C-%") 'goto-match-paren)
 
 
+(defun cw:gnus ()
+  "Switch to gnus buffer or run `gnus'."
+  (interactive)
+  (if (buffer-live-p "*Group*")
+      (switch-to-buffer"*Group*")
+    (gnus)))
+(global-set-key (kbd "<C-f1>") 'cw:gnus)
 
 
 ;; user defined completing-read-function entered in emacs24
