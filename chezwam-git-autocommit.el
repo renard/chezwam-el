@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: emacs, configuration
 ;; Created: 2011-06-28
-;; Last changed: 2011-06-28 21:47:10
+;; Last changed: 2011-06-28 23:15:29
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -29,7 +29,8 @@
 	      (when
 		  (and
 		   (file-directory-p (concat x ".git"))
-		   (string-match x (substring f 0 (length x))))
+		   (ignore-errors
+		     (string-match x (substring f 0 (length x)))))
 		x))
 	    cw:ac-dir-set))))
 
