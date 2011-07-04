@@ -16,6 +16,8 @@
 
 ;;; Code:
 
+(setq org-replace-disputed-keys t)
+
 (defun cw:org:org-mode-setup ()
   "Setup buffer for `org-mode' files."
   (unless (and
@@ -28,27 +30,37 @@
     (setq time-stamp-start "^#\\+DATE: ")
     ;; flyspell mode to spell check everywhere
     (flyspell-mode 1)
+    (save-excursion
+      (goto-char (point-min))
+      (save-match-data
+	(when (search-forward-regexp
+	       "^#\\+LANG:[ \t]+\\(.*\\)"
+	       nil t)
+	  (message (format "Loading dict %s" (match-string 1)))
+	  (ignore-errors
+	    (ispell-change-dictionary (match-string 1))))))
+
     ;;(ispell-change-dictionary "francais")
 
-    ;; redefine some key mappings in order to use windmove with Org.
-    (org-defkey org-mode-map [(shift up)]          'windmove-up)
-    (org-defkey org-mode-map [(shift down)]        'windmove-down)
-    (org-defkey org-mode-map [(shift left)]        'windmove-left)
-    (org-defkey org-mode-map [(shift right)]       'windmove-right)
-    (define-key org-mode-map (kbd "C-x <up>")    'org-shiftup)
-    (define-key org-mode-map (kbd "C-x <down>")  'org-shiftdown)
-    (define-key org-mode-map (kbd "C-x <left>")  'org-shiftleft)
-    (define-key org-mode-map (kbd "C-x <right>") 'org-shiftright)
+    ;; ;; redefine some key mappings in order to use windmove with Org.
+    ;; (org-defkey org-mode-map [(shift up)]          'windmove-up)
+    ;; (org-defkey org-mode-map [(shift down)]        'windmove-down)
+    ;; (org-defkey org-mode-map [(shift left)]        'windmove-left)
+    ;; (org-defkey org-mode-map [(shift right)]       'windmove-right)
+    ;; (define-key org-mode-map (kbd "C-x <up>")    'org-shiftup)
+    ;; (define-key org-mode-map (kbd "C-x <down>")  'org-shiftdown)
+    ;; (define-key org-mode-map (kbd "C-x <left>")  'org-shiftleft)
+    ;; (define-key org-mode-map (kbd "C-x <right>") 'org-shiftright)
 
-    ;; redefine some key mappings in order to use windmove with Org-calendar.
-    (org-defkey org-agenda-mode-map [(shift up)]          'windmove-up)
-    (org-defkey org-agenda-mode-map [(shift down)]        'windmove-down)
-    (org-defkey org-agenda-mode-map [(shift left)]        'windmove-left)
-    (org-defkey org-agenda-mode-map [(shift right)]       'windmove-right)
-    (define-key org-agenda-mode-map (kbd "C-x <up>")    'org-agenda-priority-up)
-    (define-key org-agenda-mode-map (kbd "C-x <down>")  'org-agenda-priority-down)
-    (define-key org-agenda-mode-map (kbd "C-x <left>")  'org-agenda-do-date-earlier)
-    (define-key org-agenda-mode-map (kbd "C-x <right>") 'org-agenda-do-date-later)
+    ;; ;; redefine some key mappings in order to use windmove with Org-calendar.
+    ;; (org-defkey org-agenda-mode-map [(shift up)]          'windmove-up)
+    ;; (org-defkey org-agenda-mode-map [(shift down)]        'windmove-down)
+    ;; (org-defkey org-agenda-mode-map [(shift left)]        'windmove-left)
+    ;; (org-defkey org-agenda-mode-map [(shift right)]       'windmove-right)
+    ;; (define-key org-agenda-mode-map (kbd "C-x <up>")    'org-agenda-priority-up)
+    ;; (define-key org-agenda-mode-map (kbd "C-x <down>")  'org-agenda-priority-down)
+    ;; (define-key org-agenda-mode-map (kbd "C-x <left>")  'org-agenda-do-date-earlier)
+    ;; (define-key org-agenda-mode-map (kbd "C-x <right>") 'org-agenda-do-date-later)
 
     ))
 
