@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: emacs, configuration, term
 ;; Created: 2010-12-16
-;; Last changed: 2011-01-03 12:33:08
+;; Last changed: 2011-07-04 14:49:53
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -95,6 +95,53 @@ directory."
       (ansi-term shell)))))
 
 
+(defadvice shell
+  (after cw:shell activate)
+  (when (ignore-errors (get-buffer-process ad-return-value))
+    (set-process-sentinel
+     (get-buffer-process ad-return-value)
+     (lambda (proc change)
+       (when (eq (process-status proc) 'exit)
+         (kill-buffer (process-buffer proc)))))))
+
+
+(defmacro cw:term:with-parse-directory (sudo &rest body)
+  "Execute BODY with a declaration of following variables after
+setting `default-directory' to the directory of file file visited
+in current buffer.
+
+If SUDO is not nil `method' is set to \"sudo\" and `user' to
+\"root\".
+"
+  `(let* ((sudo ,sudo)
+	  (current-buffer-dir
+	   ;; get directory name from either dired or buffer file name and
+	   ;; fall back to nil
+	   (or (ignore-errors (dired-current-directory))
+	       (ignore-errors (file-name-directory (buffer-file-name)))
+	       "~"))
+	  (file-vector
+	   ;; get a tramp usable file URI from directory.
+	   (or (ignore-errors (tramp-dissect-file-name current-buffer-dir))
+	       (tramp-dissect-file-name (concat "/:" current-buffer-dir) 1)))
+	  ;; split file URI into its components
+	  (method (if ,sudo "sudo" (tramp-file-name-method file-vector)))
+	  (user (if ,sudo "root" (tramp-file-name-user file-vector)))
+	  (localname (tramp-file-name-localname file-vector))
+	  (host (tramp-file-name-host file-vector))
+	  (default-directory
+	    ;; If no method is defined then the file is local
+	    ;; then don't use tramp.
+	    (if method
+		(tramp-make-tramp-file-name method user host localname)
+	      localname)))
+     ,@body))
+
+(defun cw:term:shell (&optional sudo)
+  "Run terminal in current buffer directory."
+  (interactive "P")
+  (cw:term:with-parse-directory sudo (progn (shell))))
+
 (defun cw:term:toggle-line-mode()
   "Toogle between line and char mode in term-mode."
   (interactive)
@@ -109,7 +156,8 @@ directory."
   (unless (and (eq major-mode 'term-mode) (term-in-char-mode))
     ad-do-it))
 
-(global-set-key (kbd "C-x RET") 'cw:term:run)
+(global-set-key (kbd "C-x <C-return>") 'cw:term:shell)
+(global-set-key (kbd "C-x <S-return>") 'cw:term:run)
 
 (defun cw:term:backward-word ()
   "Move backward work in term-mode."
