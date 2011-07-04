@@ -5,7 +5,7 @@
 ;; Author: Sebastien Gross <seb•ɑƬ•chezwam•ɖɵʈ•org>
 ;; Keywords: emacs, org, configuration
 ;; Created: 2010-12-21
-;; Last changed: 2011-06-29 23:52:51
+;; Last changed: 2011-07-04 10:35:28
 ;; Licence: WTFPL, grab your copy here: http://sam.zoy.org/wtfpl/
 
 ;; This file is NOT part of GNU Emacs.
@@ -107,12 +107,6 @@
       (org-set-tags-to (append '("CLEAR") tags-list))
       (hide-entry)
       (show-children 3))))
-
-(setq org-agenda-files '("~/.emacs.d/org/agenda.org"
-			 "~/.emacs.d/org/todo.org"
-			 "~/.emacs.d/org/diary.org"
-			 "~/.emacs.d/org/rentabiliweb.org"
-			 "~/.emacs.d/org/refile.org"))
 
 
 (add-to-list 'org-link-escape-chars '(?\311 . "%C9")) ; É
