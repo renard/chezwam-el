@@ -84,7 +84,7 @@
     (if (looking-at "-----BEGIN PGP MESSAGE-----")
 	(org-decrypt-entry)
       (org-encrypt-entry))))
-(define-key org-mode-map (kbd "C-c C-x C-e") 'cw:org:toggle-encryption)
+(define-key org-mode-map (kbd "C-c E") 'cw:org:toggle-encryption)
 
 (defadvice org-encrypt-entry
   (around cw:org-encrypt-entry activate)
